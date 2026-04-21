@@ -24,6 +24,7 @@ import {
 interface Item {
   id: string;
   description: string;
+  specifications: string;
   quantity: number;
   unitPrice: number;
 }
@@ -69,7 +70,7 @@ export default function App() {
   const [department, setDepartment] = useState('');
   const [purpose, setPurpose] = useState('');
   const [items, setItems] = useState<Item[]>([
-    { id: crypto.randomUUID(), description: '', quantity: 0, unitPrice: 0 }
+    { id: crypto.randomUUID(), description: '', specifications: '', quantity: 0, unitPrice: 0 }
   ]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -87,7 +88,7 @@ export default function App() {
   };
 
   const addItem = () => {
-    setItems([...items, { id: crypto.randomUUID(), description: '', quantity: 0, unitPrice: 0 }]);
+    setItems([...items, { id: crypto.randomUUID(), description: '', specifications: '', quantity: 0, unitPrice: 0 }]);
   };
 
   const removeItem = (id: string) => {
@@ -123,9 +124,10 @@ export default function App() {
     
     if (items.length === 0) return false;
     
-    // Check if every item has a valid description, quantity > 0, and unitPrice > 0
+    // Check if every item has a valid description, specifications, quantity > 0, and unitPrice > 0
     return items.every(item => 
       item.description.trim() !== '' && 
+      item.specifications.trim() !== '' && 
       item.quantity > 0 && 
       item.unitPrice > 0
     );
@@ -170,7 +172,7 @@ export default function App() {
       setEmployeeNo('');
       setDepartment('');
       setPurpose('');
-      setItems([{ id: crypto.randomUUID(), description: '', quantity: 0, unitPrice: 0 }]);
+      setItems([{ id: crypto.randomUUID(), description: '', specifications: '', quantity: 0, unitPrice: 0 }]);
 
       setTimeout(() => {
         setSubmitStatus('idle');
@@ -340,7 +342,7 @@ export default function App() {
               <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-200">
-                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Description <span className="text-red-500">*</span></th>
+                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Item Details <span className="text-red-500">*</span></th>
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-24 text-center">Qty <span className="text-red-500">*</span></th>
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-36 text-right">Unit Price <span className="text-red-500">*</span></th>
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-40 text-right">Total</th>
@@ -358,16 +360,25 @@ export default function App() {
                         layout
                         className="group hover:bg-slate-50 transition-colors"
                       >
-                        <td className="px-6 py-4">
-                          <input
-                            type="text"
-                            placeholder="Enter item description..."
-                            className="w-full bg-transparent outline-none text-brand-text font-medium transition-colors"
-                            value={item.description}
-                            onChange={(e) => updateItem(item.id, 'description', e.target.value)}
-                          />
+                        <td className="px-6 py-4 min-w-[250px] align-top">
+                          <div className="space-y-3">
+                            <input
+                              type="text"
+                              placeholder="Device Name (e.g., MacBook Pro 16)"
+                              className="w-full bg-transparent border-b border-slate-200 pb-2 outline-none text-brand-text font-bold transition-colors focus:border-brand-primary/50"
+                              value={item.description}
+                              onChange={(e) => updateItem(item.id, 'description', e.target.value)}
+                            />
+                            <textarea
+                              placeholder="Specifications (e.g., M3 Max, 36GB RAM, 1TB SSD...)"
+                              rows={2}
+                              className="w-full bg-transparent outline-none text-brand-text text-sm transition-colors resize-none placeholder:text-slate-400/70"
+                              value={item.specifications}
+                              onChange={(e) => updateItem(item.id, 'specifications', e.target.value)}
+                            />
+                          </div>
                         </td>
-                        <td className="px-6 py-4 text-center">
+                        <td className="px-6 py-4 text-center align-top pt-5">
                           <input
                             type="number"
                             min="0"
@@ -377,7 +388,7 @@ export default function App() {
                             onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 0)}
                           />
                         </td>
-                        <td className="px-6 py-4 text-right">
+                        <td className="px-6 py-4 text-right align-top pt-5">
                           <div className="flex items-center justify-end gap-1 font-mono transition-colors">
                             <span className="opacity-40 text-xs">KES</span>
                             <input
@@ -391,12 +402,12 @@ export default function App() {
                             />
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-right">
+                        <td className="px-6 py-4 text-right align-top pt-5">
                           <span className="font-mono font-bold text-slate-700">
                             KES{item.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-center no-print">
+                        <td className="px-6 py-4 text-center no-print align-top pt-4">
                           <button
                             onClick={() => removeItem(item.id)}
                             className="text-slate-300 hover:text-red-500 transition-all p-1.5 rounded-md hover:bg-red-50"

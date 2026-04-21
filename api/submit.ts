@@ -37,7 +37,7 @@ export default async function handler(req: any, res: any) {
 
     const sheets = google.sheets({ version: 'v4', auth });
 
-    const itemSummary = items.map((i: any) => `${i.description} (x${i.quantity})`).join(', ');
+    const itemSummary = items.map((i: any) => `${i.description} [${i.specifications}] (x${i.quantity})`).join('\n');
     
     // Format timestamp
     const kenyanTimestamp = new Intl.DateTimeFormat('en-GB', {
