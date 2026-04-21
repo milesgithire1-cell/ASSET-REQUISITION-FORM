@@ -58,6 +58,17 @@ async function startServer() {
       
       const itemSummary = items.map((i: any) => `${i.description} (x${i.quantity})`).join(', ');
       
+      const kenyanTimestamp = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Africa/Nairobi',
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      }).format(new Date());
+
       const values = [
         [
           inquiryDate,
@@ -67,7 +78,7 @@ async function startServer() {
           purpose,
           itemSummary,
           grandTotal,
-          new Date().toISOString()
+          kenyanTimestamp
         ]
       ];
 

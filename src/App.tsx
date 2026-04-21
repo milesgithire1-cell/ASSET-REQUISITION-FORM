@@ -54,7 +54,16 @@ const EMPLOYEE_DATA_MAP: Record<string, { department: string; employeeId: string
 const AUTHORIZED_EMAILS = Object.keys(EMPLOYEE_DATA_MAP);
 
 export default function App() {
-  const [inquiryDate] = useState(new Date().toISOString().split('T')[0]);
+  const getKenyanDate = () => {
+    return new Intl.DateTimeFormat('en-CA', { 
+      timeZone: 'Africa/Nairobi', 
+      year: 'numeric', 
+      month: '2-digit', 
+      day: '2-digit' 
+    }).format(new Date());
+  };
+
+  const [inquiryDate] = useState(getKenyanDate());
   const [employeeName, setEmployeeName] = useState('');
   const [employeeNo, setEmployeeNo] = useState('');
   const [department, setDepartment] = useState('');
@@ -218,7 +227,7 @@ export default function App() {
               <div className="relative">
                 <div className="w-20 h-20 bg-white rounded-xl p-1 flex items-center justify-center shadow-lg">
                   <img
-                    src="/Screenshot 2026-04-15 145851.png"
+                    src="/logo.png"
                     alt="Company Logo"
                     className="w-full h-full object-contain"
                     referrerPolicy="no-referrer"
@@ -236,7 +245,7 @@ export default function App() {
                   Requisition Date
                 </label>
                 <div className="text-xl font-bold w-full text-white font-mono">
-                  {new Date(inquiryDate).toLocaleDateString('en-GB', { 
+                  {new Date(inquiryDate + 'T00:00:00').toLocaleDateString('en-GB', { 
                     day: '2-digit', 
                     month: 'short', 
                     year: 'numeric' 
