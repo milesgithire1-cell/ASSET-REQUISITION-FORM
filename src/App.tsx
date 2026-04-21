@@ -224,19 +224,6 @@ export default function App() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-brand-primary/10 rounded-full -mr-32 -mt-32 blur-3xl animate-pulse" />
           <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              <div className="relative">
-                <div className="w-20 h-20 bg-white rounded-xl p-1 flex items-center justify-center shadow-lg overflow-hidden">
-                  <img
-                    src="/logo.svg"
-                    alt="Company Logo"
-                    className="w-full h-full object-contain"
-                    referrerPolicy="no-referrer"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                </div>
-              </div>
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">Asset Requisition Form</h1>
                 <p className="text-white/70 font-medium tracking-wide">Digital Requisition Portal</p>
