@@ -225,12 +225,15 @@ export default function App() {
           <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
               <div className="relative">
-                <div className="w-20 h-20 bg-white rounded-xl p-1 flex items-center justify-center shadow-lg">
+                <div className="w-20 h-20 bg-white rounded-xl p-1 flex items-center justify-center shadow-lg overflow-hidden">
                   <img
-                    src="/logo.png"
+                    src="/logo.svg"
                     alt="Company Logo"
                     className="w-full h-full object-contain"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
                   />
                 </div>
               </div>
