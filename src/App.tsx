@@ -362,7 +362,7 @@ export default function App() {
                           <input
                             type="text"
                             placeholder="Enter item description..."
-                            className="w-full bg-transparent outline-none focus:text-brand-primary font-medium transition-colors"
+                            className="w-full bg-transparent outline-none text-brand-text font-medium transition-colors"
                             value={item.description}
                             onChange={(e) => updateItem(item.id, 'description', e.target.value)}
                           />
@@ -372,20 +372,20 @@ export default function App() {
                             type="number"
                             min="0"
                             placeholder="0"
-                            className="w-full bg-transparent text-center outline-none font-mono focus:text-brand-primary transition-colors"
+                            className="w-full bg-transparent text-center outline-none font-mono text-brand-text transition-colors"
                             value={item.quantity === 0 ? '' : item.quantity}
                             onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 0)}
                           />
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <div className="flex items-center justify-end gap-1 font-mono focus-within:text-brand-primary transition-colors">
+                          <div className="flex items-center justify-end gap-1 font-mono transition-colors">
                             <span className="opacity-40 text-xs">KES</span>
                             <input
                               type="number"
                               min="0"
                               step="0.01"
                               placeholder="0.00"
-                              className="w-24 bg-transparent text-right outline-none"
+                              className="w-24 bg-transparent text-right outline-none text-brand-text"
                               value={item.unitPrice === 0 ? '' : item.unitPrice}
                               onChange={(e) => updateItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
                             />
