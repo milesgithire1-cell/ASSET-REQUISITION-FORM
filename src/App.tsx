@@ -475,17 +475,6 @@ export default function App() {
         </div>
       </motion.div>
 
-      {/* Info Notice */}
-      <div className="max-w-4xl mx-auto mt-8 px-4 no-print">
-        <div className="flex items-start gap-4 text-slate-500 text-[10px] font-bold uppercase tracking-[0.15em] bg-white p-6 rounded-2xl border border-slate-200 shadow-sm leading-relaxed">
-          <Calendar size={18} className="text-brand-primary shrink-0" />
-          <p>
-            Digitally capture your signature directly in the portal using your mouse or touch screen. 
-            Once signed, click "Submit Requisition" to finalize the digital record and send it to the database. 
-            Signatures are transient and will be embedded in the submission payload.
-          </p>
-        </div>
-      </div>
     </div>
   );
 }
