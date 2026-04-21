@@ -56,7 +56,8 @@ async function startServer() {
       // Let's do one row per form for the main data, and maybe a linked sheet?
       // Or just a summarized row. Let's do a summarized row for simplicity in a "simple database".
       
-      const itemSummary = items.map((i: any) => `${i.description} [${i.specifications}] (x${i.quantity})`).join('\n');
+      const itemSummary = items.map((i: any) => `${i.description} (x${i.quantity})`).join('\n');
+      const specSummary = items.map((i: any) => i.specifications).join('\n');
       
       const kenyanTimestamp = new Intl.DateTimeFormat('en-GB', {
         timeZone: 'Africa/Nairobi',
@@ -77,6 +78,7 @@ async function startServer() {
           department,
           purpose,
           itemSummary,
+          specSummary,
           grandTotal,
           kenyanTimestamp
         ]
@@ -84,7 +86,7 @@ async function startServer() {
 
       await sheets.spreadsheets.values.append({
         spreadsheetId,
-        range: 'Sheet1!A:H',
+        range: 'Sheet1!A:I',
         valueInputOption: 'RAW',
         requestBody: { values },
       });

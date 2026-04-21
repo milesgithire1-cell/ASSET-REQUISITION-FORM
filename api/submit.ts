@@ -37,7 +37,8 @@ export default async function handler(req: any, res: any) {
 
     const sheets = google.sheets({ version: 'v4', auth });
 
-    const itemSummary = items.map((i: any) => `${i.description} [${i.specifications}] (x${i.quantity})`).join('\n');
+    const itemSummary = items.map((i: any) => `${i.description} (x${i.quantity})`).join('\n');
+    const specSummary = items.map((i: any) => i.specifications).join('\n');
     
     // Format timestamp
     const kenyanTimestamp = new Intl.DateTimeFormat('en-GB', {
@@ -59,6 +60,7 @@ export default async function handler(req: any, res: any) {
         department,
         purpose,
         itemSummary,
+        specSummary,
         grandTotal,
         kenyanTimestamp
       ]
@@ -66,7 +68,7 @@ export default async function handler(req: any, res: any) {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'Sheet1!A:H',
+      range: 'Sheet1!A:I',
       valueInputOption: 'RAW',
       requestBody: { values },
     });

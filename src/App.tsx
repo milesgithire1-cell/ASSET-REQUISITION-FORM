@@ -281,10 +281,11 @@ export default function App() {
               <input
                 type="text"
                 placeholder={employeeNo ? "" : "Auto-filled from email..."}
-                className={`input-field font-mono shadow-sm ${employeeNo || employeeName ? 'bg-slate-100 text-slate-600 cursor-not-allowed' : ''}`}
+                className={`input-field font-mono shadow-sm ${employeeNo || employeeName ? 'bg-slate-100 text-slate-600 cursor-not-allowed select-none' : ''}`}
                 value={employeeNo}
                 onChange={(e) => setEmployeeNo(e.target.value)}
-                readOnly={!!employeeName}
+                disabled={!!employeeName}
+                tabIndex={employeeName ? -1 : 0}
               />
             </motion.div>
             <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
@@ -295,10 +296,11 @@ export default function App() {
               <input
                 type="text"
                 placeholder="Auto-filled from email..."
-                className="input-field shadow-sm bg-slate-100 text-slate-600 cursor-not-allowed"
+                className="input-field shadow-sm bg-slate-100 text-slate-600 cursor-not-allowed select-none"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                readOnly
+                disabled
+                tabIndex={-1}
               />
             </motion.div>
             <motion.div 
