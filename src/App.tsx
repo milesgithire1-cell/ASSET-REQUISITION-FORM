@@ -367,14 +367,14 @@ export default function App() {
                             <input
                               type="text"
                               placeholder="Device Name (e.g., MacBook Pro 16)"
-                              className="w-full bg-transparent border-b border-slate-200 pb-2 outline-none text-brand-text font-bold transition-colors focus:border-brand-primary/50"
+                              className="input-field shadow-sm w-full font-semibold"
                               value={item.description}
                               onChange={(e) => updateItem(item.id, 'description', e.target.value)}
                             />
                             <textarea
                               placeholder="Specifications (e.g., M3 Max, 36GB RAM, 1TB SSD...)"
                               rows={2}
-                              className="w-full bg-transparent outline-none text-brand-text text-sm transition-colors resize-none placeholder:text-slate-400/70"
+                              className="input-field shadow-sm w-full text-sm resize-none"
                               value={item.specifications}
                               onChange={(e) => updateItem(item.id, 'specifications', e.target.value)}
                             />
@@ -385,20 +385,20 @@ export default function App() {
                             type="number"
                             min="0"
                             placeholder="0"
-                            className="w-full bg-transparent text-center outline-none font-mono text-brand-text transition-colors"
+                            className="input-field shadow-sm mx-auto w-20 text-center font-mono"
                             value={item.quantity === 0 ? '' : item.quantity}
                             onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 0)}
                           />
                         </td>
                         <td className="px-6 py-4 text-right align-top pt-5">
-                          <div className="flex items-center justify-end gap-1 font-mono transition-colors">
-                            <span className="opacity-40 text-xs">KES</span>
+                          <div className="flex items-center px-3 py-2 bg-white border border-slate-200 rounded-lg focus-within:ring-2 focus-within:ring-brand-primary/20 focus-within:border-brand-primary transition-all duration-200 shadow-sm w-32 ml-auto">
+                            <span className="text-slate-400 text-xs font-semibold mr-1 select-none">KES</span>
                             <input
                               type="number"
                               min="0"
                               step="0.01"
                               placeholder="0.00"
-                              className="w-24 bg-transparent text-right outline-none text-brand-text"
+                              className="w-full bg-transparent text-right outline-none text-brand-text font-mono"
                               value={item.unitPrice === 0 ? '' : item.unitPrice}
                               onChange={(e) => updateItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
                             />

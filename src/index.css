@@ -13,6 +13,9 @@
   body {
     @apply bg-slate-50 text-brand-text antialiased;
   }
+  input, textarea, select {
+    @apply caret-brand-primary text-brand-text;
+  }
 }
 
 @layer components {
