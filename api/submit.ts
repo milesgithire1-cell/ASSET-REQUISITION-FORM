@@ -39,6 +39,7 @@ export default async function handler(req: any, res: any) {
 
     const itemSummary = items.map((i: any) => `${i.description} (x${i.quantity})`).join('\n');
     const specSummary = items.map((i: any) => i.specifications).join('\n');
+    const prioritySummary = items.map((i: any) => (i.priority || 'Not set').toUpperCase()).join('\n');
     
     // Format timestamp
     const kenyanTimestamp = new Intl.DateTimeFormat('en-GB', {
@@ -61,6 +62,7 @@ export default async function handler(req: any, res: any) {
         purpose,
         itemSummary,
         specSummary,
+        prioritySummary,
         grandTotal,
         kenyanTimestamp
       ]
@@ -68,7 +70,7 @@ export default async function handler(req: any, res: any) {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'Sheet1!A:I',
+      range: 'Sheet1!A:J',
       valueInputOption: 'RAW',
       requestBody: { values },
     });

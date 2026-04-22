@@ -58,6 +58,7 @@ async function startServer() {
       
       const itemSummary = items.map((i: any) => `${i.description} (x${i.quantity})`).join('\n');
       const specSummary = items.map((i: any) => i.specifications).join('\n');
+      const prioritySummary = items.map((i: any) => (i.priority || 'Not set').toUpperCase()).join('\n');
       
       const kenyanTimestamp = new Intl.DateTimeFormat('en-GB', {
         timeZone: 'Africa/Nairobi',
@@ -79,6 +80,7 @@ async function startServer() {
           purpose,
           itemSummary,
           specSummary,
+          prioritySummary,
           grandTotal,
           kenyanTimestamp
         ]
@@ -86,7 +88,7 @@ async function startServer() {
 
       await sheets.spreadsheets.values.append({
         spreadsheetId,
-        range: 'Sheet1!A:I',
+        range: 'Sheet1!A:J',
         valueInputOption: 'RAW',
         requestBody: { values },
       });

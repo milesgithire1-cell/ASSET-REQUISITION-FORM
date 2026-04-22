@@ -25,6 +25,7 @@ interface Item {
   id: string;
   description: string;
   specifications: string;
+  priority: string;
   quantity: string;
   unitPrice: string;
 }
@@ -70,7 +71,7 @@ export default function App() {
   const [department, setDepartment] = useState('');
   const [purpose, setPurpose] = useState('');
   const [items, setItems] = useState<Item[]>([
-    { id: crypto.randomUUID(), description: '', specifications: '', quantity: '', unitPrice: '' }
+    { id: crypto.randomUUID(), description: '', specifications: '', priority: '', quantity: '', unitPrice: '' }
   ]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -88,7 +89,7 @@ export default function App() {
   };
 
   const addItem = () => {
-    setItems([...items, { id: crypto.randomUUID(), description: '', specifications: '', quantity: '', unitPrice: '' }]);
+    setItems([...items, { id: crypto.randomUUID(), description: '', specifications: '', priority: '', quantity: '', unitPrice: '' }]);
   };
 
   const removeItem = (id: string) => {
@@ -134,6 +135,7 @@ export default function App() {
       const u = parseFloat(item.unitPrice) || 0;
       return item.description.trim() !== '' && 
              item.specifications.trim() !== '' && 
+             item.priority !== '' &&
              q > 0 && 
              u > 0;
     });
@@ -178,7 +180,7 @@ export default function App() {
       setEmployeeNo('');
       setDepartment('');
       setPurpose('');
-      setItems([{ id: crypto.randomUUID(), description: '', specifications: '', quantity: '', unitPrice: '' }]);
+      setItems([{ id: crypto.randomUUID(), description: '', specifications: '', priority: '', quantity: '', unitPrice: '' }]);
 
       setTimeout(() => {
         setSubmitStatus('idle');
@@ -351,6 +353,7 @@ export default function App() {
                 <thead className="hidden md:table-header-group">
                   <tr className="bg-slate-50 border-b border-slate-200 block md:table-row">
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Item Details <span className="text-red-500">*</span></th>
+                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-48 text-center">Priority <span className="text-red-500">*</span></th>
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-24 text-center">Qty <span className="text-red-500">*</span></th>
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-36 text-right">Unit Price <span className="text-red-500">*</span></th>
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-40 text-right">Total</th>
@@ -385,6 +388,30 @@ export default function App() {
                               value={item.specifications}
                               onChange={(e) => updateItem(item.id, 'specifications', e.target.value)}
                             />
+                          </div>
+                        </td>
+                        <td className="block md:table-cell px-2 md:px-6 py-2 md:py-4 text-left md:text-center align-top md:pt-5">
+                          <div className="md:hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">Priority <span className="text-red-500">*</span></div>
+                          <div className="flex flex-col md:flex-row gap-2 justify-center">
+                            {['low', 'medium', 'high'].map((p) => {
+                              const isSelected = item.priority === p;
+                              let colors = 'bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100';
+                              if (isSelected) {
+                                if (p === 'low') colors = 'bg-orange-100 text-orange-700 border-orange-300 shadow-sm' ;
+                                if (p === 'medium') colors = 'bg-green-100 text-green-700 border-green-300 shadow-sm';
+                                if (p === 'high') colors = 'bg-red-100 text-red-700 border-red-300 shadow-sm';
+                              }
+                              return (
+                                <button
+                                  key={p}
+                                  onClick={() => updateItem(item.id, 'priority', p)}
+                                  className={`flex-1 md:flex-none px-3 py-2 md:py-1.5 rounded-lg border text-[11px] font-bold uppercase tracking-wider transition-all ${colors}`}
+                                  type="button"
+                                >
+                                  {p}
+                                </button>
+                              );
+                            })}
                           </div>
                         </td>
                         <td className="block md:table-cell px-2 md:px-6 py-2 md:py-4 text-left md:text-center align-top md:pt-5">
@@ -436,7 +463,7 @@ export default function App() {
                 </tbody>
                 <tfoot className="block md:table-footer-group border-t-4 border-slate-200 md:border-transparent">
                   <tr className="bg-slate-100 text-slate-700 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex flex-col md:table-row">
-                    <td colSpan={3} className="hidden md:table-cell px-6 py-6 text-right font-bold uppercase tracking-[0.25em] text-[10px] opacity-80">
+                    <td colSpan={4} className="hidden md:table-cell px-6 py-6 text-right font-bold uppercase tracking-[0.25em] text-[10px] opacity-80">
                       Statement Total
                     </td>
                     <td className="block md:table-cell px-6 py-6 text-center md:text-right">
