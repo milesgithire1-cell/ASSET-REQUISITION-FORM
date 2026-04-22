@@ -23,6 +23,10 @@
     @apply w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all duration-200;
   }
   
+  .hide-spin-button {
+    @apply [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none;
+  }
+  
   .label-text {
     @apply block text-sm font-semibold text-brand-text mb-1.5;
   }

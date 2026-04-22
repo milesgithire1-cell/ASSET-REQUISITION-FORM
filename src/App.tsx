@@ -25,8 +25,8 @@ interface Item {
   id: string;
   description: string;
   specifications: string;
-  quantity: number;
-  unitPrice: number;
+  quantity: string;
+  unitPrice: string;
 }
 
 const EMPLOYEE_DATA_MAP: Record<string, { department: string; employeeId: string }> = {
@@ -70,7 +70,7 @@ export default function App() {
   const [department, setDepartment] = useState('');
   const [purpose, setPurpose] = useState('');
   const [items, setItems] = useState<Item[]>([
-    { id: crypto.randomUUID(), description: '', specifications: '', quantity: 0, unitPrice: 0 }
+    { id: crypto.randomUUID(), description: '', specifications: '', quantity: '', unitPrice: '' }
   ]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -88,7 +88,7 @@ export default function App() {
   };
 
   const addItem = () => {
-    setItems([...items, { id: crypto.randomUUID(), description: '', specifications: '', quantity: 0, unitPrice: 0 }]);
+    setItems([...items, { id: crypto.randomUUID(), description: '', specifications: '', quantity: '', unitPrice: '' }]);
   };
 
   const removeItem = (id: string) => {
@@ -107,10 +107,14 @@ export default function App() {
   };
 
   const totals = useMemo(() => {
-    return items.map(item => ({
-      ...item,
-      total: item.quantity * item.unitPrice
-    }));
+    return items.map(item => {
+      const q = parseFloat(item.quantity) || 0;
+      const u = parseFloat(item.unitPrice) || 0;
+      return {
+        ...item,
+        total: q * u
+      };
+    });
   }, [items]);
 
   const grandTotal = useMemo(() => {
@@ -125,12 +129,14 @@ export default function App() {
     if (items.length === 0) return false;
     
     // Check if every item has a valid description, specifications, quantity > 0, and unitPrice > 0
-    return items.every(item => 
-      item.description.trim() !== '' && 
-      item.specifications.trim() !== '' && 
-      item.quantity > 0 && 
-      item.unitPrice > 0
-    );
+    return items.every(item => {
+      const q = parseFloat(item.quantity) || 0;
+      const u = parseFloat(item.unitPrice) || 0;
+      return item.description.trim() !== '' && 
+             item.specifications.trim() !== '' && 
+             q > 0 && 
+             u > 0;
+    });
   }, [employeeName, employeeNo, department, purpose, items]);
 
   const handleSubmit = async () => {
@@ -172,7 +178,7 @@ export default function App() {
       setEmployeeNo('');
       setDepartment('');
       setPurpose('');
-      setItems([{ id: crypto.randomUUID(), description: '', specifications: '', quantity: 0, unitPrice: 0 }]);
+      setItems([{ id: crypto.randomUUID(), description: '', specifications: '', quantity: '', unitPrice: '' }]);
 
       setTimeout(() => {
         setSubmitStatus('idle');
@@ -385,9 +391,9 @@ export default function App() {
                             type="number"
                             min="0"
                             placeholder="0"
-                            className="input-field shadow-sm mx-auto w-20 text-center font-mono"
-                            value={item.quantity === 0 ? '' : item.quantity}
-                            onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 0)}
+                            className="input-field shadow-sm mx-auto w-20 text-center font-mono hide-spin-button"
+                            value={item.quantity}
+                            onChange={(e) => updateItem(item.id, 'quantity', e.target.value)}
                           />
                         </td>
                         <td className="px-6 py-4 text-right align-top pt-5">
@@ -398,9 +404,9 @@ export default function App() {
                               min="0"
                               step="0.01"
                               placeholder="0.00"
-                              className="w-full bg-transparent text-right outline-none text-brand-text font-mono"
-                              value={item.unitPrice === 0 ? '' : item.unitPrice}
-                              onChange={(e) => updateItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
+                              className="w-full bg-transparent text-right outline-none text-brand-text font-mono hide-spin-button"
+                              value={item.unitPrice}
+                              onChange={(e) => updateItem(item.id, 'unitPrice', e.target.value)}
                             />
                           </div>
                         </td>
@@ -464,17 +470,7 @@ export default function App() {
             </button>
           </div>
         </div>
-
-        {/* Legal/Footer */}
-        <div className="bg-slate-50/50 px-10 py-6 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] text-slate-400 font-bold uppercase tracking-[0.3em]">
-          <div className="flex items-center gap-3">
-             <span className="inline-block w-2 h-2 bg-brand-primary rounded-full animate-pulse" />
-             <span>AssetFlow Runtime Hash: {useMemo(() => crypto.randomUUID().slice(0, 16), []).toUpperCase()}</span>
-          </div>
-          <span className="opacity-60 text-right">Document Restricted to Internal Use Only</span>
-        </div>
       </motion.div>
-
     </div>
   );
 }
