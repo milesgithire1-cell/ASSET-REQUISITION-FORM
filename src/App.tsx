@@ -330,7 +330,7 @@ export default function App() {
 
           {/* Items Table Section */}
           <div className="space-y-6">
-            <div className="flex justify-between items-center bg-slate-50/80 p-3 rounded-xl border border-slate-100">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/80 p-4 rounded-xl border border-slate-100">
               <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-500 flex items-center gap-3">
                 Items List
                 <span className="bg-white text-brand-primary px-3 py-1 rounded-full text-xs font-mono border border-brand-primary/20 shadow-sm">
@@ -339,17 +339,17 @@ export default function App() {
               </h2>
               <button
                 onClick={addItem}
-                className="no-print flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white bg-brand-primary hover:opacity-90 px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg active:scale-95"
+                className="no-print w-full sm:w-auto justify-center flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white bg-brand-primary hover:opacity-90 px-4 py-3 sm:py-2 rounded-lg transition-all shadow-md hover:shadow-lg active:scale-95"
               >
                 <Plus size={14} />
                 Add Entry
               </button>
             </div>
 
-            <div className="overflow-x-auto border border-slate-200 rounded-2xl shadow-sm bg-white">
-              <table className="w-full text-left border-collapse min-w-[700px]">
-                <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200">
+            <div className="border border-slate-200 rounded-2xl shadow-sm bg-white overflow-hidden">
+              <table className="w-full text-left border-collapse block md:table">
+                <thead className="hidden md:table-header-group">
+                  <tr className="bg-slate-50 border-b border-slate-200 block md:table-row">
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Item Details <span className="text-red-500">*</span></th>
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-24 text-center">Qty <span className="text-red-500">*</span></th>
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-36 text-right">Unit Price <span className="text-red-500">*</span></th>
@@ -357,7 +357,7 @@ export default function App() {
                     <th className="px-6 py-4 w-12 no-print"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y-4 md:divide-y md:divide-slate-100 block md:table-row-group">
                   <AnimatePresence initial={false}>
                     {totals.map((item) => (
                       <motion.tr 
@@ -366,9 +366,10 @@ export default function App() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.98 }}
                         layout
-                        className="group hover:bg-slate-50 transition-colors"
+                        className="group hover:bg-slate-50 transition-colors flex flex-col md:table-row relative p-4 md:p-0"
                       >
-                        <td className="px-6 py-4 min-w-[250px] align-top">
+                        <td className="block md:table-cell px-2 md:px-6 py-2 md:py-4 min-w-[250px] align-top">
+                          <div className="md:hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">Item Details <span className="text-red-500">*</span></div>
                           <div className="space-y-3">
                             <input
                               type="text"
@@ -386,18 +387,20 @@ export default function App() {
                             />
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-center align-top pt-5">
+                        <td className="block md:table-cell px-2 md:px-6 py-2 md:py-4 text-left md:text-center align-top md:pt-5">
+                          <div className="md:hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">Quantity <span className="text-red-500">*</span></div>
                           <input
                             type="number"
                             min="0"
                             placeholder="0"
-                            className="input-field shadow-sm mx-auto w-20 text-center font-mono hide-spin-button"
+                            className="input-field shadow-sm w-full md:mx-auto md:w-20 md:text-center font-mono hide-spin-button"
                             value={item.quantity}
                             onChange={(e) => updateItem(item.id, 'quantity', e.target.value)}
                           />
                         </td>
-                        <td className="px-6 py-4 text-right align-top pt-5">
-                          <div className="flex items-center px-3 py-2 bg-white border border-slate-200 rounded-lg focus-within:ring-2 focus-within:ring-brand-primary/20 focus-within:border-brand-primary transition-all duration-200 shadow-sm w-32 ml-auto">
+                        <td className="block md:table-cell px-2 md:px-6 py-2 md:py-4 text-left md:text-right align-top md:pt-5">
+                          <div className="md:hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">Unit Price <span className="text-red-500">*</span></div>
+                          <div className="flex items-center px-3 py-2 bg-white border border-slate-200 rounded-lg focus-within:ring-2 focus-within:ring-brand-primary/20 focus-within:border-brand-primary transition-all duration-200 shadow-sm w-full md:w-32 md:ml-auto">
                             <span className="text-slate-400 text-xs font-semibold mr-1 select-none">KES</span>
                             <input
                               type="number"
@@ -410,15 +413,18 @@ export default function App() {
                             />
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-right align-top pt-5">
-                          <span className="font-mono font-bold text-slate-700">
-                            KES{item.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </span>
+                        <td className="block md:table-cell px-2 md:px-6 py-4 mt-2 md:mt-0 text-left md:text-right align-top md:pt-5 bg-slate-50 md:bg-transparent rounded-lg md:rounded-none">
+                          <div className="flex justify-between items-center md:block">
+                            <div className="md:hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Total</div>
+                            <span className="font-mono font-bold text-slate-700 text-lg md:text-base">
+                              KES{item.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </span>
+                          </div>
                         </td>
-                        <td className="px-6 py-4 text-center no-print align-top pt-4">
+                        <td className="block md:table-cell px-2 md:px-6 py-2 text-center no-print align-top md:pt-4 absolute md:relative top-2 right-2 md:top-auto md:right-auto">
                           <button
                             onClick={() => removeItem(item.id)}
-                            className="text-slate-300 hover:text-red-500 transition-all p-1.5 rounded-md hover:bg-red-50"
+                            className="bg-white md:bg-transparent absolute top-0 right-0 md:relative text-slate-400 shadow-sm md:shadow-none border border-slate-200 md:border-transparent hover:text-red-500 transition-all p-2 rounded-lg hover:bg-red-50 hover:border-red-200"
                             disabled={items.length <= 1}
                           >
                             <Trash2 size={14} />
@@ -428,13 +434,14 @@ export default function App() {
                     ))}
                   </AnimatePresence>
                 </tbody>
-                <tfoot>
-                  <tr className="bg-slate-100 text-slate-700 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-                    <td colSpan={3} className="px-6 py-6 text-right font-bold uppercase tracking-[0.25em] text-[10px] opacity-80">
+                <tfoot className="block md:table-footer-group border-t-4 border-slate-200 md:border-transparent">
+                  <tr className="bg-slate-100 text-slate-700 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex flex-col md:table-row">
+                    <td colSpan={3} className="hidden md:table-cell px-6 py-6 text-right font-bold uppercase tracking-[0.25em] text-[10px] opacity-80">
                       Statement Total
                     </td>
-                    <td className="px-6 py-6 text-right">
-                      <div className="flex items-center justify-end gap-2 text-2xl font-black">
+                    <td className="block md:table-cell px-6 py-6 text-center md:text-right">
+                      <div className="md:hidden text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400 mb-2">Statement Total</div>
+                      <div className="flex items-center justify-center md:justify-end gap-2 text-3xl md:text-2xl font-black text-brand-primary md:text-slate-700">
                         <span className="text-sm opacity-50">KES</span>
                         <span className="font-mono">
                           {grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
