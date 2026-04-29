@@ -27,7 +27,6 @@ interface Item {
   specifications: string;
   priority: string;
   quantity: string;
-  unitPrice: string;
 }
 
 const EMPLOYEE_DATA_MAP: Record<string, { department: string; employeeId: string }> = {
@@ -71,7 +70,7 @@ export default function App() {
   const [department, setDepartment] = useState('');
   const [purpose, setPurpose] = useState('');
   const [items, setItems] = useState<Item[]>([
-    { id: crypto.randomUUID(), description: '', specifications: '', priority: '', quantity: '', unitPrice: '' }
+    { id: crypto.randomUUID(), description: '', specifications: '', priority: '', quantity: '' }
   ]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -89,7 +88,7 @@ export default function App() {
   };
 
   const addItem = () => {
-    setItems([...items, { id: crypto.randomUUID(), description: '', specifications: '', priority: '', quantity: '', unitPrice: '' }]);
+    setItems([...items, { id: crypto.randomUUID(), description: '', specifications: '', priority: '', quantity: '' }]);
   };
 
   const removeItem = (id: string) => {
@@ -107,21 +106,6 @@ export default function App() {
     }));
   };
 
-  const totals = useMemo(() => {
-    return items.map(item => {
-      const q = parseFloat(item.quantity) || 0;
-      const u = parseFloat(item.unitPrice) || 0;
-      return {
-        ...item,
-        total: q * u
-      };
-    });
-  }, [items]);
-
-  const grandTotal = useMemo(() => {
-    return totals.reduce((sum, item) => sum + item.total, 0);
-  }, [totals]);
-
   const isFormValid = useMemo(() => {
     if (!employeeName.trim() || !employeeNo.trim() || !department.trim() || !purpose.trim()) {
       return false;
@@ -132,12 +116,10 @@ export default function App() {
     // Check if every item has a valid description, specifications, quantity > 0, and unitPrice > 0
     return items.every(item => {
       const q = parseFloat(item.quantity) || 0;
-      const u = parseFloat(item.unitPrice) || 0;
       return item.description.trim() !== '' && 
              item.specifications.trim() !== '' && 
              item.priority !== '' &&
-             q > 0 && 
-             u > 0;
+             q > 0;
     });
   }, [employeeName, employeeNo, department, purpose, items]);
 
@@ -159,8 +141,7 @@ export default function App() {
         employeeNo,
         department,
         purpose,
-        items,
-        grandTotal
+        items
       };
 
       const response = await fetch('/api/submit', {
@@ -180,7 +161,7 @@ export default function App() {
       setEmployeeNo('');
       setDepartment('');
       setPurpose('');
-      setItems([{ id: crypto.randomUUID(), description: '', specifications: '', priority: '', quantity: '', unitPrice: '' }]);
+      setItems([{ id: crypto.randomUUID(), description: '', specifications: '', priority: '', quantity: '' }]);
 
       setTimeout(() => {
         setSubmitStatus('idle');
@@ -355,14 +336,12 @@ export default function App() {
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Item Details <span className="text-red-500">*</span></th>
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-48 text-center">Priority <span className="text-red-500">*</span></th>
                     <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-24 text-center">Qty <span className="text-red-500">*</span></th>
-                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-36 text-right">Unit Price <span className="text-red-500">*</span></th>
-                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 w-40 text-right">Total</th>
                     <th className="px-6 py-4 w-12 no-print"></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y-4 md:divide-y md:divide-slate-100 block md:table-row-group">
                   <AnimatePresence initial={false}>
-                    {totals.map((item) => (
+                    {items.map((item) => (
                       <motion.tr 
                         key={item.id}
                         initial={{ opacity: 0, y: 5 }}
@@ -425,29 +404,6 @@ export default function App() {
                             onChange={(e) => updateItem(item.id, 'quantity', e.target.value)}
                           />
                         </td>
-                        <td className="block md:table-cell px-2 md:px-6 py-2 md:py-4 text-left md:text-right align-top md:pt-5">
-                          <div className="md:hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">Unit Price <span className="text-red-500">*</span></div>
-                          <div className="flex items-center px-3 py-2 bg-white border border-slate-200 rounded-lg focus-within:ring-2 focus-within:ring-brand-primary/20 focus-within:border-brand-primary transition-all duration-200 shadow-sm w-full md:w-32 md:ml-auto">
-                            <span className="text-slate-400 text-xs font-semibold mr-1 select-none">KES</span>
-                            <input
-                              type="number"
-                              min="0"
-                              step="0.01"
-                              placeholder="0.00"
-                              className="w-full bg-transparent text-right outline-none text-brand-text font-mono hide-spin-button"
-                              value={item.unitPrice}
-                              onChange={(e) => updateItem(item.id, 'unitPrice', e.target.value)}
-                            />
-                          </div>
-                        </td>
-                        <td className="block md:table-cell px-2 md:px-6 py-4 mt-2 md:mt-0 text-left md:text-right align-top md:pt-5 bg-slate-50 md:bg-transparent rounded-lg md:rounded-none">
-                          <div className="flex justify-between items-center md:block">
-                            <div className="md:hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Total</div>
-                            <span className="font-mono font-bold text-slate-700 text-lg md:text-base">
-                              KES{item.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </span>
-                          </div>
-                        </td>
                         <td className="block md:table-cell px-2 md:px-6 py-2 text-center no-print align-top md:pt-4 absolute md:relative top-2 right-2 md:top-auto md:right-auto">
                           <button
                             onClick={() => removeItem(item.id)}
@@ -461,23 +417,6 @@ export default function App() {
                     ))}
                   </AnimatePresence>
                 </tbody>
-                <tfoot className="block md:table-footer-group border-t-4 border-slate-200 md:border-transparent">
-                  <tr className="bg-slate-100 text-slate-700 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex flex-col md:table-row">
-                    <td colSpan={4} className="hidden md:table-cell px-6 py-6 text-right font-bold uppercase tracking-[0.25em] text-[10px] opacity-80">
-                      Statement Total
-                    </td>
-                    <td className="block md:table-cell px-6 py-6 text-center md:text-right">
-                      <div className="md:hidden text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400 mb-2">Statement Total</div>
-                      <div className="flex items-center justify-center md:justify-end gap-2 text-3xl md:text-2xl font-black text-brand-primary md:text-slate-700">
-                        <span className="text-sm opacity-50">KES</span>
-                        <span className="font-mono">
-                          {grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="no-print"></td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
           </div>

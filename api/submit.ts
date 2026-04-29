@@ -63,14 +63,13 @@ export default async function handler(req: any, res: any) {
         itemSummary,
         specSummary,
         prioritySummary,
-        grandTotal,
         kenyanTimestamp
       ]
     ];
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'Sheet1!A:J',
+      range: 'Sheet1!A:I',
       valueInputOption: 'RAW',
       requestBody: { values },
     });
